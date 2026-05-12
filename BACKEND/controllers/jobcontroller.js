@@ -27,6 +27,7 @@ const CreateJob = async (req, res) => {
         res.status(500).json({ msg: "Server error" })
     }
 }
+
 // -------------READ JOBS---------------------------
 
 const GetJobs = async (req, res) => {
@@ -68,7 +69,5 @@ const DeleteJobs = async (req, res) => {
         res.status(500).json({ msg: "Server error" })
     }
 }
-
-
 
 module.exports = { CreateJob, GetJobs, UpdateJobs, DeleteJobs }

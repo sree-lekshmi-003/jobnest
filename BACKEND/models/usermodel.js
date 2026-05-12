@@ -21,6 +21,8 @@ const userSchema=new mongoose.Schema({
         phone:{
             type:String
         }
+        
+
     },
         { timestamps: true })
     const user = mongoose.model('User', userSchema)
