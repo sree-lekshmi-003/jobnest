@@ -1,6 +1,6 @@
 const Job = require('../models/jobmodel')
 
-// ----------------CREATE JOB---------------------------
+// ---------------------------------CREATE JOB------------------------------------
 
 const CreateJob = async (req, res) => {
     const { Jobrole,
@@ -28,7 +28,7 @@ const CreateJob = async (req, res) => {
     }
 }
 
-// -------------READ JOBS---------------------------
+// ---------------------------------------------READ JOBS-------------------------
 
 const GetJobs = async (req, res) => {
     try {
@@ -40,7 +40,7 @@ const GetJobs = async (req, res) => {
     }
 }
 
-// --------------UPDATE JOBS------------------------
+// ----------------------------------------------UPDATE JOBS----------------------
 
 const UpdateJobs = async (req, res) => {
     try {
@@ -55,7 +55,7 @@ const UpdateJobs = async (req, res) => {
     }
 }
 
-// -----------------------DELETE JOBS---------------
+// ----------------------------------------------DELETE JOBS----------------------
 
 const DeleteJobs = async (req, res) => {
     try {
