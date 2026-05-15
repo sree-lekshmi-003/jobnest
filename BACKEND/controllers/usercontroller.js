@@ -42,7 +42,6 @@ const Login = async (req, res) => {
     }
     catch (error) {
         return res.status(500).json({ msg: "Server error", error })
-        console.log(error);
 
     }
 }
@@ -50,7 +49,7 @@ const Login = async (req, res) => {
 //------------------------------------------GET PROFILE------------------------------------
 
 const getprofile = async (req, res) => {
-    const user = await User.findById(req.user.id).select("password");
+    const user = await User.findById(req.user.id).select("-password");
     res.json(user);
 };
 

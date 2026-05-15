@@ -1,10 +1,10 @@
 const express = require('express')
 const Router = express.Router()
 const jobcontroller = require("../controllers/jobcontroller")
-
-Router.post('/createjob', jobcontroller.CreateJob)
+const middleware=require("../middleware/authmiddleware")
+Router.post('/createjob',middleware, jobcontroller.CreateJob)
 Router.get('/alljobs', jobcontroller.GetJobs)
-Router.put('/updatejob/:id', jobcontroller.UpdateJobs)
-Router.delete('/deletejobs/:id', jobcontroller.DeleteJobs)
-
+Router.put('/updatejob/:id',middleware, jobcontroller.UpdateJobs)
+Router.delete('/deletejobs/:id',middleware, jobcontroller.DeleteJobs)
 module.exports = Router
+
