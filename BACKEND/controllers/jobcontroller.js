@@ -1,17 +1,15 @@
 const Job = require('../models/jobmodel')
 
-// ---------------------------------CREATE JOB------------------------------------
-
 const CreateJob = async (req, res) => {
 
-    // ROLE CHECK
+//------------------------------- ROLE CHECK-------------------------------------
 
     if (req.user.role !== "employer") {
         return res.status(403).json({
             msg: "Only employer can create jobs"
         })
     }
-    // ------------------------------------------------------------------------------------
+// ---------------------------------CREATE JOB------------------------------------
 
     const { jobRole,
         company,
@@ -39,7 +37,7 @@ const CreateJob = async (req, res) => {
     }
 }
 
-// ---------------------------------------------READ JOBS-------------------------
+// ----------------------------------READ JOBS--------------------------------
 
 const GetJobs = async (req, res) => {
     try {
@@ -51,11 +49,11 @@ const GetJobs = async (req, res) => {
     }
 }
 
-// ----------------------------------------------UPDATE JOBS----------------------
+// --------------------------------UPDATE JOBS---------------------------------
 
 const UpdateJobs = async (req, res) => {
 
-    // ROLE CHECK
+//----------------- ROLE CHECK
     if (req.user.role !== "employer") {
 
         return res.status(403).json({
@@ -71,7 +69,7 @@ const UpdateJobs = async (req, res) => {
             return res.json({ msg: "Job not found" })
         }
 
-        // OWNER CHECK
+//--------------------- OWNER CHECK
         if (job.employer.toString() !== req.user.id) {
 
             return res.status(403).json({
@@ -80,31 +78,31 @@ const UpdateJobs = async (req, res) => {
         }
 // ------------------------------------------------------------------------------------
 
-        const updatejobs = await Job.findByIdAndUpdate(
+        const updatejob = await Job.findByIdAndUpdate(
             id,
             req.body,
             { new: true }
         )
 
-        // ---------------------------------------------------------------------------------
-        res.status(200).json({ msg: "Job updated successfuly", updatejobs: updatejobs })
+// -----------------------------------------------------------------------------------
+        res.status(200).json({ msg: "Job updated successfuly", updatejobs: updatejob })
     } catch (error) {
         res.status(500).json({ msg: "Server error" })
     }
 }
 
-// ----------------------------------------------DELETE JOBS----------------------
+// ---------------------------------------DELETE JOBS--------------------------------
 
 const DeleteJobs = async (req, res) => {
 
-    // ROLE CHECK
+//---------------------- ROLE CHECK
     if (req.user.role !== "employer") {
 
         return res.status(403).json({
             msg: "Only employer can delete jobs"
         })
     }
-    // ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
     try {
         const { id } = req.params
@@ -113,14 +111,14 @@ const DeleteJobs = async (req, res) => {
             res.status(404).json({ msg: "Job not found" })
         }
 
-        // OWNER CHECK
+//-------------------- OWNER CHECK
         if (job.employer.toString() !== req.user.id) {
 
             return res.status(403).json({
                 msg: "You can delete only your jobs"
             })
         }
-        // -----------------------------------------
+// -----------------------------------------
         await Job.findByIdAndDelete(id)
 
         res.status(200).json({ msg: "Job deleted successfully" })

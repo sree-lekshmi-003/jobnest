@@ -1,11 +1,11 @@
 const Application = require('../models/applicationmodel')
 const Job = require('../models/jobmodel')
 
-// -------------------------------- APPLY JOB ----------------------------------------------
+// ------------------------------------APPLY JOB ----------------------------------------------
 
 const ApplyJob = async (req, res) => {
 
-//----------------------------------- ONLY USERS CAN APPLY------------------------------------------------
+//----------------------------------- ONLY USERS CAN APPLY-------------------------------------
     if (req.user.role !== "user") {
 
         return res.status(403).json({
@@ -28,7 +28,7 @@ const ApplyJob = async (req, res) => {
             })
         }
 
-//--------------------------------------------- CHECK ALREADY APPLIED-------------------------------
+//---------------------------------------------CHECK ALREADY APPLIED-------------------------------
 
         const alreadyApplied = await Application.findOne({
             user: req.user.id,
@@ -42,7 +42,7 @@ const ApplyJob = async (req, res) => {
             })
         }
 
-//-------------------------------------------------- CREATE APPLICATION------------------------------------
+//----------------------------------------------CREATE APPLICATION-------------------------------------
 
         const newApplication = await new Application({
             user: req.user.id,
@@ -105,7 +105,7 @@ const GetApplicants = async (req, res) => {
 
         const { jobid } = req.params
 
-        // FIND JOB
+//----------------------- FIND JOB
         const job = await Job.findById(jobid)
 
         if (!job) {
@@ -148,7 +148,7 @@ const GetApplicants = async (req, res) => {
 
 const UpdateApplicationStatus = async (req, res) => {
 
-    // ONLY EMPLOYER
+//----------------- ONLY EMPLOYER
     if (req.user.role !== "employer") {
 
         return res.status(403).json({
@@ -162,7 +162,7 @@ const UpdateApplicationStatus = async (req, res) => {
 
         const { status } = req.body
 
-        // FIND APPLICATION
+//---------------- FIND APPLICATION
         const application = await Application.findById(applicationid)
         .populate("job")
 
@@ -173,7 +173,7 @@ const UpdateApplicationStatus = async (req, res) => {
             })
         }
 
-        // OWNER CHECK
+//------------------- OWNER CHECK
         if (application.job.employer.toString() !== req.user.id) {
 
             return res.status(403).json({
@@ -181,7 +181,7 @@ const UpdateApplicationStatus = async (req, res) => {
             })
         }
 
-        // UPDATE STATUS
+//-------------- UPDATE STATUS
         application.status = status
 
         await application.save()

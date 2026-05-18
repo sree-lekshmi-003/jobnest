@@ -63,7 +63,7 @@ const updateprofile = async (req, res) => {
     res.json(updateduser);
 };
 
-module.exports = { getprofile, updateprofile, registeruser, Login };
+module.exports = { registeruser,Login,getprofile, updateprofile, };
 
 
 
