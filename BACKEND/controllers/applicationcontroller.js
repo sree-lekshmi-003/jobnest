@@ -2,49 +2,39 @@ const Application = require('../models/applicationmodel')
 const Job = require('../models/jobmodel')
 
 // ------------------------------------APPLY JOB ----------------------------------------------
-
 const ApplyJob = async (req, res) => {
-
-//----------------------------------- ONLY USERS CAN APPLY-------------------------------------
+    //----------------------------------- ONLY USERS CAN APPLY-------------------------------------
     if (req.user.role !== "user") {
-
         return res.status(403).json({
             msg: "Only users can apply for jobs"
         })
     }
 
     try {
-
         const { jobid } = req.params
 
-//------------------------------- CHECK JOB EXISTS---------------------------------------------
-
+        //------------------------------- CHECK JOB EXISTS---------------------------------------------
         const job = await Job.findById(jobid)
-
         if (!job) {
-
             return res.status(404).json({
                 msg: "Job not found"
             })
         }
 
-//---------------------------------------------CHECK ALREADY APPLIED-------------------------------
-
+        //---------------------------------------------CHECK ALREADY APPLIED-------------------------------
         const alreadyApplied = await Application.findOne({
             user: req.user.id,
             job: jobid
         })
 
         if (alreadyApplied) {
-
             return res.status(400).json({
                 msg: "Already applied for this job"
             })
         }
 
-//----------------------------------------------CREATE APPLICATION-------------------------------------
-
-        const newApplication = await new Application({
+        //----------------------------------------------CREATE APPLICATION-------------------------------------
+        const newApplication = new Application({
             user: req.user.id,
             job: jobid
         })
@@ -57,7 +47,6 @@ const ApplyJob = async (req, res) => {
         })
 
     } catch (error) {
-
         res.status(500).json({
             msg: "Server error"
         })
@@ -65,15 +54,11 @@ const ApplyJob = async (req, res) => {
 }
 
 // ----------------------------- GET MY APPLICATIONS --------------------------------
-
 const GetMyApplications = async (req, res) => {
-
     try {
-
         const applications = await Application.find({
             user: req.user.id
-        })
-        .populate("job")
+        }).populate("job")
 
         res.status(200).json({
             msg: "My Applications",
@@ -81,55 +66,43 @@ const GetMyApplications = async (req, res) => {
         })
 
     } catch (error) {
-
         res.status(500).json({
             msg: "Server error"
         })
     }
 }
 
-
 // ------------------------------- GET APPLICANTS -----------------------------------
-
 const GetApplicants = async (req, res) => {
-
-//--------------------------------- ONLY EMPLOYER------------------------------------
+    //--------------------------------- ONLY EMPLOYER------------------------------------
     if (req.user.role !== "employer") {
-
         return res.status(403).json({
             msg: "Only employers can view applicants"
         })
     }
 
     try {
-
         const { jobid } = req.params
 
-//----------------------- FIND JOB
+        //----------------------- FIND JOB
         const job = await Job.findById(jobid)
-
         if (!job) {
-
             return res.status(404).json({
                 msg: "Job not found"
             })
         }
 
-//---------------------------------- OWNER CHECK--------------------------------------
-
+        //---------------------------------- OWNER CHECK--------------------------------------
         if (job.employer.toString() !== req.user.id) {
-
             return res.status(403).json({
                 msg: "You can view applicants only for your jobs"
             })
         }
 
-//---------------------------------------- GET APPLICATIONS----------------------------
-
+        //---------------------------------------- GET APPLICATIONS----------------------------
         const applicants = await Application.find({
             job: jobid
-        })
-        .populate("user", "-password")
+        }).populate("user", "-password")
 
         res.status(200).json({
             msg: "Applicants List",
@@ -137,7 +110,6 @@ const GetApplicants = async (req, res) => {
         })
 
     } catch (error) {
-
         res.status(500).json({
             msg: "Server error"
         })
@@ -145,45 +117,35 @@ const GetApplicants = async (req, res) => {
 }
 
 // -------------------------- UPDATE APPLICATION STATUS --------------------------
-
 const UpdateApplicationStatus = async (req, res) => {
-
-//----------------- ONLY EMPLOYER
+    //----------------- ONLY EMPLOYER
     if (req.user.role !== "employer") {
-
         return res.status(403).json({
             msg: "Only employers can update status"
         })
     }
 
     try {
-
         const { applicationid } = req.params
-
         const { status } = req.body
 
-//---------------- FIND APPLICATION
-        const application = await Application.findById(applicationid)
-        .populate("job")
-
+        //---------------- FIND APPLICATION
+        const application = await Application.findById(applicationid).populate("job")
         if (!application) {
-
             return res.status(404).json({
                 msg: "Application not found"
             })
         }
 
-//------------------- OWNER CHECK
+        //------------------- OWNER CHECK
         if (application.job.employer.toString() !== req.user.id) {
-
             return res.status(403).json({
                 msg: "Unauthorized"
             })
         }
 
-//-------------- UPDATE STATUS
+        //-------------- UPDATE STATUS
         application.status = status
-
         await application.save()
 
         res.status(200).json({
@@ -192,12 +154,10 @@ const UpdateApplicationStatus = async (req, res) => {
         })
 
     } catch (error) {
-
         res.status(500).json({
             msg: "Server error"
         })
     }
 }
 
-
-module.exports = {ApplyJob,GetMyApplications,GetApplicants,UpdateApplicationStatus}
+module.exports = { ApplyJob, GetMyApplications, GetApplicants, UpdateApplicationStatus }

@@ -1,26 +1,17 @@
 const Job = require('../models/jobmodel')
 
+// ----------------------------------CREATE JOB--------------------------------
 const CreateJob = async (req, res) => {
-
-//------------------------------- ROLE CHECK-------------------------------------
-
+    //------------------------------- ROLE CHECK-------------------------------------
     if (req.user.role !== "employer") {
         return res.status(403).json({
             msg: "Only employer can create jobs"
         })
     }
-// ---------------------------------CREATE JOB------------------------------------
 
-    const { jobRole,
-        company,
-        location,
-        salary,
-        description,
-        jobtype
-    } = req.body
+    const { jobRole, company, location, salary, description, jobtype } = req.body
     try {
-
-        const newdata = await new Job({
+        const newdata = new Job({
             jobRole,
             company,
             location,
@@ -38,7 +29,6 @@ const CreateJob = async (req, res) => {
 }
 
 // ----------------------------------READ JOBS--------------------------------
-
 const GetJobs = async (req, res) => {
     try {
         const jobs = await Job.find().sort({ createdAt: -1 })
@@ -50,33 +40,28 @@ const GetJobs = async (req, res) => {
 }
 
 // --------------------------------UPDATE JOBS---------------------------------
-
 const UpdateJobs = async (req, res) => {
-
-//----------------- ROLE CHECK
+    //----------------- ROLE CHECK
     if (req.user.role !== "employer") {
-
         return res.status(403).json({
             msg: "Only employer can update jobs"
         })
     }
-// -----------------------------------------------------------------------------
 
     try {
         const { id } = req.params
-        const updatejobs = await Job.findById(id)
-        if (!updatejobs) {
-            return res.json({ msg: "Job not found" })
+        // FIXED: Renamed variable to 'currentJob' to align with the check logic below
+        const currentJob = await Job.findById(id)
+        if (!currentJob) {
+            return res.status(404).json({ msg: "Job not found" })
         }
 
-//--------------------- OWNER CHECK
-        if (job.employer.toString() !== req.user.id) {
-
+        //--------------------- OWNER CHECK
+        if (currentJob.employer.toString() !== req.user.id) {
             return res.status(403).json({
                 msg: "You can update only your jobs"
             })
         }
-// ------------------------------------------------------------------------------------
 
         const updatejob = await Job.findByIdAndUpdate(
             id,
@@ -84,43 +69,37 @@ const UpdateJobs = async (req, res) => {
             { new: true }
         )
 
-// -----------------------------------------------------------------------------------
-        res.status(200).json({ msg: "Job updated successfuly", updatejobs: updatejob })
+        res.status(200).json({ msg: "Job updated successfully", updatejobs: updatejob })
     } catch (error) {
         res.status(500).json({ msg: "Server error" })
     }
 }
 
 // ---------------------------------------DELETE JOBS--------------------------------
-
 const DeleteJobs = async (req, res) => {
-
-//---------------------- ROLE CHECK
+    //---------------------- ROLE CHECK
     if (req.user.role !== "employer") {
-
         return res.status(403).json({
             msg: "Only employer can delete jobs"
         })
     }
-// ----------------------------------------------------------------------------
 
     try {
         const { id } = req.params
-        const deletejobs = await Job.findById(id)
-        if (!deletejobs) {
-            res.status(404).json({ msg: "Job not found" })
+        // FIXED: Renamed variable to 'currentJob' to align with the check logic below
+        const currentJob = await Job.findById(id)
+        if (!currentJob) {
+            return res.status(404).json({ msg: "Job not found" })
         }
 
-//-------------------- OWNER CHECK
-        if (job.employer.toString() !== req.user.id) {
-
+        //-------------------- OWNER CHECK
+        if (currentJob.employer.toString() !== req.user.id) {
             return res.status(403).json({
                 msg: "You can delete only your jobs"
             })
         }
-// -----------------------------------------
-        await Job.findByIdAndDelete(id)
 
+        await Job.findByIdAndDelete(id)
         res.status(200).json({ msg: "Job deleted successfully" })
     } catch (error) {
         res.status(500).json({ msg: "Server error" })

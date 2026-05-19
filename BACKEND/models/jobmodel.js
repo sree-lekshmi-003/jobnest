@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const jobSchema = new mongoose.Schema({
     jobRole: {
         type: String,
@@ -15,7 +16,6 @@ const jobSchema = new mongoose.Schema({
     salary: {
         type: String,
         required: true
-
     },
     description: {
         type: String,
@@ -26,9 +26,10 @@ const jobSchema = new mongoose.Schema({
     }, 
     employer: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User", // Links the job to the Employer who created it
+        required: true
     }
-},
-    { timestamps: true })
-const Job = mongoose.model('Job', jobSchema)
-module.exports = Job
+}, { timestamps: true });
+
+const Job = mongoose.model('Job', jobSchema);
+module.exports = Job;

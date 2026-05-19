@@ -3,7 +3,6 @@ const Job = require('../models/jobmodel')
 const Application = require('../models/applicationmodel')
 
 // ----------------------GET ALL USERS--------------------------------
-
 const GetUsers = async (req, res) => {
     try {
         const users = await User.find().select("-password")
@@ -11,12 +10,10 @@ const GetUsers = async (req, res) => {
     }
     catch (error) {
         res.status(500).json({ msg: "Server error" })
-
     }
 }
 
 // ----------------------DELETE USERS-------------------------------------
-
 const DeleteUser = async (req, res) => {
     try {
         const { id } = req.params
@@ -42,7 +39,6 @@ const GetAllJobs = async (req, res) => {
 }
 
 //------------------------------- DELETE ANY JOB---------------------------
-
 const DeleteAnyJob = async (req, res) => {
     try {
         const { id } = req.params
@@ -50,7 +46,6 @@ const DeleteAnyJob = async (req, res) => {
         if (!job) {
             return res.status(404).json({ msg: "Job not found" })
         }
-
         await Job.findByIdAndDelete(id)
         res.status(200).json({ msg: "Job deleted successfully" })
     } catch (error) {
@@ -59,14 +54,14 @@ const DeleteAnyJob = async (req, res) => {
 }
 
 // -----------------------------GET ALL APPLICATIONS-----------------------
-
-const GetApplications=async(req,res)=>{
-    try{
-        const applications=await Application.find().populate("user","name email").populate("job","jobRole company")
-        res.status(200).json({msg:"All applications"})
-    }catch(error){
-        res.status(500).json({msg:"Server error"})
+const GetApplications = async (req, res) => {
+    try {
+        const applications = await Application.find().populate("user", "name email").populate("job", "jobRole company")
+        // FIXED: Added the data payload so the admin can actually see the applications list
+        res.status(200).json({ msg: "All applications", data: applications })
+    } catch (error) {
+        res.status(500).json({ msg: "Server error" })
     }
 }
 
-module.exports={GetUsers,DeleteUser,GetAllJobs,DeleteAnyJob,GetApplications}
+module.exports = { GetUsers, DeleteUser, GetAllJobs, DeleteAnyJob, GetApplications }

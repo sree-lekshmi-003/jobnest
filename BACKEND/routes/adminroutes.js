@@ -1,15 +1,12 @@
 const express = require('express')
-const Router = express.Router()
-const admincontroller = require('../controllers/admincontroller')
+const router = express.Router()
+const admincontroller = require('../controllers/adminController')
 const middleware = require('../middleware/authmiddleware')
-const adminRole=require('../middleware/adminmiddleware')
+const adminRole = require('../middleware/adminmiddleware')
 
-Router.get('/allusers',middleware,adminRole,admincontroller.GetUsers)
+router.get('/allusers', middleware, adminRole, admincontroller.GetUsers)
+router.delete('/deleteuser/:id', middleware, adminRole, admincontroller.DeleteUser)
+router.get('/alljobs', middleware, adminRole, admincontroller.GetAllJobs)
+router.get('/allapplications', middleware, adminRole, admincontroller.GetApplications)
 
-Router.delete('/deleteuser/:id',middleware,adminRole,admincontroller.DeleteUser)
-
-Router.get('/alljobs',middleware,adminRole,admincontroller.DeleteAnyJob)
-
-Router.get('/allapplications',middleware,adminRole,admincontroller.GetApplications)
-
-module.exports = Router
+module.exports = router
