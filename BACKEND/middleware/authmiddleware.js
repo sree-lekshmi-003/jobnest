@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const middleware = async (req, res, next) => {
+const middleware = (req, res, next) => {
     let token
 
     if (

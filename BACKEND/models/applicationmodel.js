@@ -3,17 +3,17 @@ const mongoose = require('mongoose');
 const ApplicationSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Links to the candidate applying
+        ref: "User", 
         required: true
     },
     job: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Job", // Links to the specific job listing
+        ref: "Job", 
         required: true
     },
     status: {
         type: String,
-        enum: ["Pending", "Accepted", "Rejected"], // Application workflow statuses
+        enum: ["Pending", "Accepted", "Rejected"], 
         default: "Pending"
     }
 }, { timestamps: true });
