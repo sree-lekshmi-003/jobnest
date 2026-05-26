@@ -1,21 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom'
-
+import './Navbar.css'
 const Navbar = () => {
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
-  const role = localStorage.getItem('role')
+  // const role = localStorage.getItem('role')
 
-  // ---------------- LOGOUT ----------------
+  // // ---------------- LOGOUT ----------------
 
-  const logout = () => {
+  // const logout = () => {
 
-    localStorage.removeItem('token')
+  //   localStorage.removeItem('token')
 
-    localStorage.removeItem('role')
+  //   localStorage.removeItem('role')
 
-    navigate('/login')
-  }
+  //   navigate('/login')
+  // }
 
   return (
 
@@ -33,55 +33,27 @@ const Navbar = () => {
           Home
         </Link>
 
-        {/* ---------------- USER ---------------- */}
+        <Link to='/about'>
+          About Us
+        </Link>
 
-        {
-          role === "user" &&
-
-          <Link to='/applications'>
-            My Applications
-          </Link>
-        }
-
-        {/* ---------------- EMPLOYER ---------------- */}
-
-        {
-          role === "employer" &&
-
-          <Link to='/employer'>
-            Employer Dashboard
-          </Link>
-        }
-
-        {/* ---------------- ADMIN ---------------- */}
-
-        {
-          role === "admin" &&
-
-          <Link to='/admin'>
-            Admin Dashboard
-          </Link>
-        }
-
-        {/* ---------------- LOGIN / LOGOUT ---------------- */}
-
-        {
-          !role ?
-
-            <Link to='/login'>
-              Login
-            </Link>
-
-            :
-
-            <button onClick={logout}>
-              Logout
-            </button>
-        }
-
-      </div>
-
+        <Link to='/contact'>
+          Contact
+        </Link>
     </div>
+
+            <div className="nav-auth">
+
+              <Link to='/login' className='login-btn'>
+                Login
+              </Link>
+
+
+              <Link to='/register' className='register-btn'>
+                Register
+              </Link>
+            </div>
+      </div>
   )
 }
 
