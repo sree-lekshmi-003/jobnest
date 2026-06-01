@@ -1,13 +1,6 @@
 const AdminDashboard = () => {
-
   return (
-
-    <div>
-
-      <h1>Admin Dashboard</h1>
-
-    </div>
+    <div>Admin Dashboard</div>
   )
 }
-
 export default AdminDashboard

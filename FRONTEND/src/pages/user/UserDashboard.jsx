@@ -1,15 +1,12 @@
 const UserDashboard = () => {
 
+  const name = localStorage.getItem("name")
+
   return (
-
     <div>
-
-      <h1>User Dashboard</h1>
-
-      <p>
-        Welcome User
-      </p>
-
+      <h1>
+        Welcome back, {name}! 👋
+      </h1>
     </div>
   )
 }

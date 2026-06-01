@@ -42,6 +42,8 @@ const Login = async (req, res) => {
             role: user.role,
             userid: user._id,
             name: user.name
+
+            
         })
     }
     catch (error) {
